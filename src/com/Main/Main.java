@@ -2,7 +2,7 @@ package com.Main;
 import java.util.*;
 /*
  * 
- * Maintain Ordered Bogie IDs
+ * Map Bogie to Capacity
  * The Train Consist Management App is a console-based Java application that simulates how a railway system manages a train’s consist, which is a collection of bogies attached to an engine.
 
 	The application supports:
@@ -16,24 +16,27 @@ import java.util.*;
 	Each use case introduces one or more Java concepts through a realistic railway Scenario.
 	
 	@author Dhruv
-	@version 5.0
+	@version 6.0
 
  */
 public class Main {
 	public static void main(String[] args) {
 		 System.out.println("==================================================");
-	     System.out.println("============Maintain Ordered Bogie IDs============");
+	     System.out.println("============Map Bogie to Capacity============");
 
-	     Set<String> order = new LinkedHashSet<>();
+	     Map<String, Integer> capacity = new HashMap<>();
 
-	    order.add("Engine");
-	    order.add("Sleeper");
-	        order.add("Cargo");
-	        order.add("Guard");
-	        order.add("Sleeper"); 
+	        capacity.put("Sleeper", 100);
+	        capacity.put("AC Chair", 100);
+	        capacity.put("Cargo", 80);
+	        capacity.put("First Class", 30);
+	        
 
-	        System.out.println("Final Train Order:");
-	        System.out.println(order + "\n");
+	        System.out.println("Bogie Capacity Details:");
+	        for (Map.Entry<String, Integer> entry : capacity.entrySet()) {
+	            System.out.println(entry.getKey() + " -> " + entry.getValue());
+	        }
+	        System.out.println();
 
 	        
 
