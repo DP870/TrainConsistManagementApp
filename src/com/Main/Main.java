@@ -1,6 +1,8 @@
 package com.Main;
 import java.util.*;
 /*
+ * 
+ * Track Unique Bogie IDs
  * The Train Consist Management App is a console-based Java application that simulates how a railway system manages a train’s consist, which is a collection of bogies attached to an engine.
 
 	The application supports:
@@ -14,42 +16,26 @@ import java.util.*;
 	Each use case introduces one or more Java concepts through a realistic railway Scenario.
 	
 	@author Dhruv
-	@version 2.0
+	@version 3.0
 
  */
 public class Main {
 	public static void main(String[] args) {
-		System.out.println("====================================");
-		System.out.println("====Train Consist Management App====");
-		System.out.println("====================================");
-		
-		List<String> trainConsist=new ArrayList<>();
-		System.out.println("Train Intitalized successfully...");
-		System.out.println("Intial Bogie Count: "+trainConsist.size());
-		System.out.println("Current Train Consist: "+trainConsist);
-		System.out.println("");
-		System.out.println("System Ready for operations...");
-		
-		List<String> bogies=new ArrayList<>();
-		 
-		bogies.add("First Class");
-		bogies.add("AC Chair");
-		bogies.add("Sleeper");
-	    
-	    
+		 System.out.println("==================================================");
+	     System.out.println("================Track Unique Bogie IDs============");
 
-	    System.out.println("After Adding Bogies:");
-	     System.out.println("Passenger Bogies : " + bogies + "\n");
+	        Set<String> bogies = new HashSet<>();
 
-	     System.out.println("After Removing Sleeper:");
-	     bogies.remove("Sleeper");
-	     System.out.println("Passenger Bogies: " +bogies);
+	        bogies.add("BG101");
+	        bogies.add("BG102");
+	        bogies.add("BG103");
+	        bogies.add("BG104");
 
-	     System.out.println("Checking if 'Sleeper' exists:");
-	     boolean hasSleeper = bogies.contains("Sleeper");
-	     System.out.println("Contains Sleeper? : " + hasSleeper);
+	        bogies.add("BG101");  
+	        bogies.add("BG102");  
 
-	     System.out.println("Final Train Passenger Consist:");
-         System.out.println(bogies);
+	        System.out.println("Bogie IDs After Insertion:");
+	        System.out.println(bogies);
+
 		}
 }
