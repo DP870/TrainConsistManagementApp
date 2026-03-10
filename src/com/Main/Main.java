@@ -2,7 +2,7 @@ package com.Main;
 import java.util.*;
 /*
  * 
- * Track Unique Bogie IDs
+ * Maintain Ordered Bogie IDs
  * The Train Consist Management App is a console-based Java application that simulates how a railway system manages a train’s consist, which is a collection of bogies attached to an engine.
 
 	The application supports:
@@ -16,26 +16,38 @@ import java.util.*;
 	Each use case introduces one or more Java concepts through a realistic railway Scenario.
 	
 	@author Dhruv
-	@version 3.0
+	@version 4.0
 
  */
 public class Main {
 	public static void main(String[] args) {
 		 System.out.println("==================================================");
-	     System.out.println("================Track Unique Bogie IDs============");
+	     System.out.println("============Maintain Ordered Bogie IDs============");
 
-	        Set<String> bogies = new HashSet<>();
+	     List<String> trainConsist = new LinkedList<>();
 
-	        bogies.add("BG101");
-	        bogies.add("BG102");
-	        bogies.add("BG103");
-	        bogies.add("BG104");
+	        trainConsist.add("Engine");
+	        trainConsist.add("Sleeper");
+	        trainConsist.add("AC");
+	        
 
-	        bogies.add("BG101");  
-	        bogies.add("BG102");  
+	        System.out.println("Initial Train Consist:");
+	        System.out.println(trainConsist);
 
-	        System.out.println("Bogie IDs After Insertion:");
-	        System.out.println(bogies);
+	        trainConsist.add(3, "Kitchen");
+	        System.out.println("After Inserting 'Kitchen':");
+	        System.out.println(trainConsist);
+
+	        if (!trainConsist.isEmpty()) {
+	            ((LinkedList<String>) trainConsist).removeFirst();
+	        }
+	        if (!trainConsist.isEmpty()) {
+	            ((LinkedList<String>) trainConsist).removeLast();
+	        }
+
+	        System.out.println("After Removing First and Last Bogie:");
+	        System.out.println(trainConsist);
+
 
 		}
 }
