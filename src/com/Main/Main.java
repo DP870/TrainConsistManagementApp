@@ -39,13 +39,14 @@ public class Main {
 				boolean ch = true;
 				
 				while(ch) {
-					System.out.println("1. Add Bogies");
-					System.out.println("2. Remove Bogies");
-					System.out.println("3. Display Bogies");
-					System.out.println("4. Sort Bogies");
-					System.out.println("5. Filter Bogies");
-					System.out.println("6. Group By");
-					System.out.println("0. Exit");
+					System.out.println("1.Add Bogies");
+					System.out.println("2.Remove Bogies");
+					System.out.println("3.Display Bogies");
+					System.out.println("4.Sort Bogies");
+					System.out.println("5.Filter Bogies");
+					System.out.println("6.Group By");
+					System.out.println("7.Get Total Capacity");
+					System.out.println("0.Exit");
 					System.out.print("Enter Choice: ");
 					String choice = sc.nextLine();
 					
@@ -109,6 +110,10 @@ public class Main {
 								}
 							}
 							System.out.println();
+							yield true;
+						}
+						case "7" -> {
+							System.out.printf("Total Seating Capacity of Train:"+ bogies.stream().map(b -> b.getCapacity()).reduce(0, Integer::sum));
 							yield true;
 						}
 						case "0" -> {
