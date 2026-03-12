@@ -1,5 +1,24 @@
 package com.Main;
 import java.util.*;
+/*
+ * The Train Consist Management App is a console-based Java application that simulates how a railway system manages a train’s consist, which is a collection of bogies attached to an engine.
+
+	The application supports:
+
+	Passenger bogies (Sleeper, AC Chair, First Class) with seat capacity tracking.
+
+	Goods bogies (Rectangular, Cylindrical) with cargo type and safety constraints.
+
+	Tracking composition, capacity, cargo types, and safety compliance.
+
+	Each use case introduces one or more Java concepts through a realistic railway Scenario.
+	
+	@author Dhruv
+	@version 8.0
+
+ */
+import java.util.stream.Collectors;
+
 
 public class Main {
 	public static void main(String[] args) {
@@ -24,6 +43,7 @@ public class Main {
 					System.out.println("2. Remove Bogies");
 					System.out.println("3. Display Consists");
 					System.out.println("4. Sort Consists");
+					System.out.println("5. Filter By Potential Passenger Lobies");
 					System.out.println("0. Exit");
 					System.out.print("Enter Choice: ");
 					String choice = sc.nextLine();
@@ -68,6 +88,13 @@ public class Main {
 						case "4" -> {
 							Collections.sort(bogies, Comparator.comparingInt(Bogie::getCapacity));
 							System.out.println("Bogies sorted successfully!");
+							yield true;
+						}
+						case "5" -> {
+							System.out.println("Filtering Bogies (Capacity > 60): ");
+							for(Bogie bogie : bogies.stream().filter(b -> b.getCapacity() > 60).collect(Collectors.toList())) {
+								System.out.printf(bogie.getCapacity()+"-> "+ bogie.getName());
+							}
 							yield true;
 						}
 						case "0" -> {
