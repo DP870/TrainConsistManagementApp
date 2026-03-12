@@ -14,7 +14,7 @@ import java.util.*;
 	Each use case introduces one or more Java concepts through a realistic railway Scenario.
 	
 	@author Dhruv
-	@version 8.0
+	@version 9.0
 
  */
 import java.util.stream.Collectors;
@@ -41,9 +41,10 @@ public class Main {
 				while(ch) {
 					System.out.println("1. Add Bogies");
 					System.out.println("2. Remove Bogies");
-					System.out.println("3. Display Consists");
-					System.out.println("4. Sort Consists");
-					System.out.println("5. Filter By Potential Passenger Lobies");
+					System.out.println("3. Display Bogies");
+					System.out.println("4. Sort Bogies");
+					System.out.println("5. Filter Bogies");
+					System.out.println("6. Group By");
 					System.out.println("0. Exit");
 					System.out.print("Enter Choice: ");
 					String choice = sc.nextLine();
@@ -55,7 +56,7 @@ public class Main {
 							System.out.print("Enter the capacity of bogie: ");
 							String cap = sc.nextLine();
 							bogies.add(new Bogie(bogie, Integer.parseInt(cap)));
-							System.out.printf("Added bogie and capacity successfully.");
+							System.out.println("Added bogie and capacity successfully.");
 									
 							yield true;
 						}
@@ -66,18 +67,18 @@ public class Main {
 							for(Bogie b : bogies) {
 								if(b.getName().equals(bogie)) {
 									bogies.remove(b);
-									System.out.printf("Removed bogie from train successfully.");
+									System.out.println("Removed bogie from train successfully.");
 									yield true;
 								}
 							}
 
-							System.out.printf("The bogie does not exist.");
+							System.out.println("The bogie does not exist.");
 							yield true;
 
 						}
 						
 						case "3" -> {
-							System.out.println("Bogie Capacity Details:-\n");
+							System.out.println("Bogie Capacity Details:-");
 							
 							for(Bogie bogie : bogies) {
 								System.out.println(bogie.getName()+" ->"+bogie.getCapacity());
@@ -91,10 +92,23 @@ public class Main {
 							yield true;
 						}
 						case "5" -> {
-							System.out.println("Filtering Bogies (Capacity > 60): ");
+							System.out.println("Filtering Bogies: ");
 							for(Bogie bogie : bogies.stream().filter(b -> b.getCapacity() > 60).collect(Collectors.toList())) {
-								System.out.printf(bogie.getCapacity()+"-> "+ bogie.getName());
+								System.out.println(bogie.getCapacity()+"-> "+ bogie.getName());
 							}
+							yield true;
+						}
+						case "6" -> {
+					
+							Map<String, List<Bogie>> groupedBogies = bogies.stream().collect(Collectors.groupingBy(Bogie::getName));
+							System.out.println("Grouped Bogies:");
+							for(Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
+								System.out.printf("Boogie Type: %s\n", entry.getKey());
+								for(Bogie bogie : entry.getValue()) {
+									System.out.println("Capacity -> "+bogie.getCapacity());
+								}
+							}
+							System.out.println();
 							yield true;
 						}
 						case "0" -> {
