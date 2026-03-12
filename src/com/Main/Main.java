@@ -26,7 +26,7 @@ public class Main {
 		Scanner scanner = new Scanner(System.in);
 
 		System.out.println("==========================================");
-		System.out.println("   === Train Consist Management App ===   ");
+		System.out.println("======Train Consist Management App========");
 		System.out.println("==========================================");
 		List<Bogie> bogies = new ArrayList<>();
 		System.out.println("Train initializaed sucessfully");
@@ -46,7 +46,7 @@ public class Main {
 
 			ch = switch(choice) {
 			case "1" -> {
-				handleConsistFlow(bogies, scanner);
+				TrainMenu(bogies, scanner);
 				yield true;
 			}
 			case "2" -> {
@@ -68,19 +68,18 @@ public class Main {
 			
 			
 
-private static void handleConsistFlow(List<Bogie> bogies, Scanner scanner) {
+private static void TrainMenu(List<Bogie> bogies, Scanner scanner) {
 	boolean ch2 = true;
 
 	while(ch2) {
 		System.out.println("\n--- Train Consist Menu ---");
 		System.out.println("1. Add Bogies");
 		System.out.println("2. Remove Bogies");
-		System.out.println("3. Check if Bogie Exists");
-		System.out.println("4. Display Consists");
-		System.out.println("5. Sort Consists");
-		System.out.println("6. Filter By Potential Passenger Lobies");
-		System.out.println("7. Group By Bogie Type");
-		System.out.println("8. Get Total Capacity");
+		System.out.println("3. Display Consists");
+		System.out.println("4. Sort Consists");
+		System.out.println("5. Filter By Potential Passenger Lobies");
+		System.out.println("6. Group By Bogie Type");
+		System.out.println("7. Get Total Capacity");
 		System.out.println("0. Exit");
 		System.out.print("Enter Choice: ");
 		String choice = scanner.nextLine();
@@ -114,60 +113,46 @@ private static void handleConsistFlow(List<Bogie> bogies, Scanner scanner) {
 			yield true;
 
 		}
+		
 		case "3" -> {
-			System.out.print("Enter name of bogie to check: ");
-			String bogie = scanner.nextLine();
+			System.out.println("Bogie Capacity Details:-\n");
 
-			for(Bogie b : bogies) {
-				if(b.getName().equals(bogie)) {
-					System.out.printf("Contains \'%s\'? :  true\n", bogie);
-					yield true;
-				}
+			for(Bogie bogie : bogies) {
+				System.out.println("%s -> %s", bogie.getName(), bogie.getCapacity());
 			}
-
-			System.out.printf("Contains \'%s\'? :  false\n", bogie);
 
 			yield true;
 		}
 		case "4" -> {
-			System.out.println("Bogie Capacity Details:-\n");
-
-			for(Bogie bogie : bogies) {
-				System.out.printf("%s -> %s\n", bogie.getName(), bogie.getCapacity());
-			}
-
-			yield true;
-		}
-		case "5" -> {
 			Collections.sort(bogies, Comparator.comparingInt(Bogie::getCapacity));
 			System.out.println("Bogies sorted successfully!");
 			yield true;
 		}
-		case "6" -> {
+		case "5" -> {
 			System.out.println("Filtering Bogies (Capacity > 60): ");
 			for(Bogie bogie : bogies.stream().filter(b -> b.getCapacity() > 60).collect(Collectors.toList())) {
 				System.out.printf("%s -> %s\n", bogie.getName(), bogie.getCapacity());
 			}
 			yield true;
 		}
-		case "7" -> {
+		case "6" -> {
 			Map<String, List<Bogie>> groupedBogies = bogies.stream().collect(Collectors.groupingBy(Bogie::getName));
-			System.out.println("\nGrouped Bogies: \n");
+			System.out.println("Grouped Bogies:");
 			for(Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
-				System.out.printf("Boogie Type: %s\n", entry.getKey());
+				System.out.printf("Boogie Type:"+ entry.getKey());
 				for(Bogie bogie : entry.getValue()) {
-					System.out.printf("Capacity -> %s\n", bogie.getCapacity());
+					System.out.printf("Capacity ->"+bogie.getCapacity());
 				}
 			}
 			System.out.println();
 			yield true;
 		}
-		case "8" -> {
-			System.out.printf("Total Seating Capacity of Train: %d\n", bogies.stream().map(b -> b.getCapacity()).reduce(0, Integer::sum));
+		case "7" -> {
+			System.out.println("Total:"+bogies.stream().map(b -> b.getCapacity()).reduce(0, Integer::sum));
 			yield true;
 		}
 		case "0" -> {
-			System.out.println("Exiting to main menu...\n");
+			System.out.println("Thank you!!");
 			yield false;
 		}
 		default -> {
@@ -221,7 +206,7 @@ private static void handleValidationFlow(Scanner scanner) {
 			yield false;
 		}
 		default -> {
-			System.out.println("Invalid Choice!!");
+			System.out.println("Invalid Choice!");
 			yield true;
 		}
 		};
