@@ -1,5 +1,7 @@
 package com.Main;
 import java.util.*;
+
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 /*
@@ -16,206 +18,284 @@ import java.util.regex.Pattern;
 	Each use case introduces one or more Java concepts through a realistic railway Scenario.
 	
 	@author Dhruv
-	@version 11.0
+	@version 13.0
 
  */
 import java.util.stream.Collectors;
 public class Main {
 	public static void main(String[] args) {
-
-		Scanner scanner = new Scanner(System.in);
-
 		System.out.println("==========================================");
-		System.out.println("======Train Consist Management App========");
+		System.out.println("=======Train Consist Management App=======");
 		System.out.println("==========================================");
-		List<Bogie> bogies = new ArrayList<>();
-		System.out.println("Train initializaed sucessfully");
-		System.out.println("Inital Bogie Count: " + bogies.size());
-		System.out.println("Current Train Consist: " + bogies);
-		System.out.println("\nSystem ready for operations\n");
+		Scanner sc = new Scanner(System.in);
 
-		boolean ch = true;
+		List<Bogie> fleetList = new ArrayList<>();
 
-		while(ch) {
-			System.out.println("--- Train App Menu ---");
-			System.out.println("1. Manage Train Consists");
-			System.out.println("2. Validate IDs");
-			System.out.println("0. Exit");
-			System.out.print("Enter Choice: ");
-			String choice = scanner.nextLine();
+		System.out.println("Fleet initialized successfully");
+		System.out.println("Initial Unit Count: " +fleetList.size());
+		System.out.println("Current Consist: " +fleetList);
+		System.out.println("\nDispatcher ready for commands\n");
 
-			ch = switch(choice) {
+		boolean isRunning = true;
+
+		while(isRunning) {
+			System.out.println("--- System Main Menu ---");
+			System.out.println("1. Manage Consists");
+			System.out.println("2. Manage Cargo Operations");
+			System.out.println("3. Run ID Validation");
+			System.out.println("0. Exit System");
+			System.out.print("Select Option: ");
+			String navChoice = sc.nextLine();
+
+			isRunning = switch(navChoice) {
 			case "1" -> {
-				TrainMenu(bogies, scanner);
+				handleFleetFlow(fleetList, sc);
 				yield true;
 			}
 			case "2" -> {
-				handleValidationFlow(scanner);
+				handleCargoWorkflow(sc);
+				yield true;
+			}
+			case "3" -> {
+				handleSecurityFlow(sc);
+				yield true;
+			}
+			case "0" -> false;
+			default -> true;
+			};
+		}
+
+		sc.close();
+	}
+
+	private static void handleFleetFlow(List<Bogie> unitList, Scanner sc) {
+		boolean subMenu = true;
+
+		while(subMenu) {
+			System.out.println("\n--- Consist Management Menu ---");
+			System.out.println("1. Attach Bogie");
+			System.out.println("2. Detach Bogie");
+			System.out.println("3. Verify Existence");
+			System.out.println("4. Show All Bogies");
+			System.out.println("5. Organize by Capacity");
+			System.out.println("6. Filter High-Capacity Units");
+			System.out.println("7. Group by Model Type");
+			System.out.println("8. Total Fleet Capacity");
+			System.out.println("0. Return");
+			System.out.print("Action: ");
+			String action = sc.nextLine();
+
+			subMenu = switch(action) {
+			case "1" -> {
+				System.out.print("Enter bogie designation: ");
+				String label = sc.nextLine();
+
+				System.out.print("Enter seating capacity: ");
+				int cap = Integer.parseInt(sc.nextLine());
+
+				unitList.add(new Bogie(label, cap));
+				System.out.println("Bogie " + label + " (Cap: "+cap+" attached successfully.");
+
+				yield true;
+			}
+			case "2" -> {
+				System.out.print("Enter designation to detach: ");
+				String target = sc.nextLine();
+				
+				boolean removed = false;
+				for (int i = 0; i < unitList.size(); i++) {
+					if (unitList.get(i).getName().equalsIgnoreCase(target)) {
+						unitList.remove(i);
+						System.out.println("Bogie " + target + " detached from consist.");
+						removed = true;
+						break;
+					}
+				}
+
+				if(!removed) {
+					System.out.println("Unit " + target + " not found.");
+				}
+				yield true;
+			}
+			case "3" -> {
+				System.out.print("Search for bogie: ");
+				String query = sc.nextLine();
+				
+				boolean found = unitList.stream().anyMatch(b -> b.getName().equalsIgnoreCase(query));
+				System.out.println("Status for '" + query + "': " + found);
+				yield true;
+			}
+			case "4" -> {
+				System.out.println("Current Manifest Details:\n");
+				unitList.forEach(b->System.out.println(b.getName() + " >> " + b.getCapacity()));
+				yield true;
+			}
+			case "5" -> {
+				unitList.sort((b1, b2)->b1.getCapacity()-b2.getCapacity());
+				System.out.println("Consist re-ordered by capacity.");
+				yield true;
+			}
+			case "6" -> {
+				System.out.println("Filtering Units (Capacity > 60): ");
+				unitList.stream()
+						.filter(b->b.getCapacity() > 60)
+						.forEach(b->System.out.println(b.getName() + " -> " + b.getCapacity()));
+				yield true;
+			}
+			case "7" -> {
+				Map<String, List<Bogie>> mappedUnits = unitList.stream().collect(Collectors.groupingBy(Bogie::getName));
+
+				System.out.println("\nCategorized Bogie Report: \n");
+				mappedUnits.forEach((type, list) -> {
+					System.out.println("Category: " + type);
+					list.forEach(item -> System.out.println(" - Capacity: " + item.getCapacity()));
+				});
+				yield true;
+			}
+			case "8" -> {
+				int total = unitList.stream().mapToInt(Bogie::getCapacity).sum();
+				System.out.println("Aggregate Fleet Seating: " + total);
 				yield true;
 			}
 			case "0" -> {
+				System.out.println("Returning to main operations...\n");
 				yield false;
 			}
 			default -> {
+				System.out.println("Invalid Selection!!");
 				yield true;
 			}
 			};
 		}
-
-		scanner.close();
 	}
+
+	private static void handleSecurityFlow(Scanner scanner) {
+		final String train_Exp="TRN-\\d{4}";
+		final String cargo_Exp="PET-[A-Z]{2}";
+
+		Pattern pEngine = Pattern.compile(train_Exp);
+		Pattern pFreight = Pattern.compile(cargo_Exp);
+
+		boolean menuActive = true;
+
+		while(menuActive) {
+			System.out.println("--- Validation Security Menu ---");
+			System.out.println("1. Check Engine ID");
+			System.out.println("2. Check Freight ID");
+			System.out.println("0. Back");
+			System.out.print("Command: ");
+			String opt = scanner.nextLine();
+
+			if (opt.equals("1")) {
+				System.out.print("Enter Engine ID (TRN-1234): ");
+				String idInput = scanner.nextLine();
+				System.out.println("ID Verified: " + pEngine.matcher(idInput).matches());
+			} else if (opt.equals("2")) {
+				System.out.print("Enter Freight ID (PET-AB): ");
+				String idInput = scanner.nextLine();
+				System.out.println("ID Verified: " + pFreight.matcher(idInput).matches());
+			} else if (opt.equals("0")) {
+				menuActive = false;
+			} else {
+				System.out.println("Error: Command not recognized.");
+			}
+		}
+	}
+	
+	private static void handleCargoWorkflow(Scanner scanner) {
+		List<GoodsBogie> cargoList = new ArrayList<>();
+		boolean active = true;
+		
+		while(active) {
+			System.out.println("\n--- Freight Operations Menu ---");
+			System.out.println("1. Load Goods Car");
+			System.out.println("2. Remove Goods Car");
+			System.out.println("3. Inventory Verification");
+			System.out.println("4. Integrity Benchmark");
+			System.out.println("5. View Manifest");
+			System.out.println("0. Return");
+			System.out.print("Select: ");
+			String input = scanner.nextLine();
+
+			switch(input) {
+			case "1" -> {
+				System.out.print("Container Type: ");
+				String kind = scanner.nextLine();
+				System.out.print("Material: ");
+				String item = scanner.nextLine();
+				cargoList.add(new GoodsBogie(kind, item));
+				System.out.println("Loaded successfully.");
+			}
+			case "2" -> {
+				System.out.print("Container type to detach: ");
+				String searchType = scanner.nextLine();
+				cargoList.removeIf(gb -> gb.getType().equalsIgnoreCase(searchType));
+				System.out.println("Inventory updated.");
+			}
+			case "3" -> {
+				System.out.print("Check inventory for type: ");
+				String searchType = scanner.nextLine();
+				boolean exists = false;
+				for(GoodsBogie gb : cargoList) {
+					if(gb.getType().equalsIgnoreCase(searchType)) {
+						exists = true; 
+						break;
+					}
+				}
+				System.out.println("Found: " + exists);
+			}
+			case "4" -> {
+				long streamStart = System.nanoTime();
+				boolean isClear = cargoList.stream().noneMatch(b -> b.getType().equalsIgnoreCase("Cylindrical") && b.getCargo().equalsIgnoreCase("Coal"));
+				long streamEnd = System.nanoTime();
 				
-			
-			
-
-private static void TrainMenu(List<Bogie> bogies, Scanner scanner) {
-	boolean ch2 = true;
-
-	while(ch2) {
-		System.out.println("\n--- Train Consist Menu ---");
-		System.out.println("1. Add Bogies");
-		System.out.println("2. Remove Bogies");
-		System.out.println("3. Display Consists");
-		System.out.println("4. Sort Consists");
-		System.out.println("5. Filter By Potential Passenger Lobies");
-		System.out.println("6. Group By Bogie Type");
-		System.out.println("7. Get Total Capacity");
-		System.out.println("0. Exit");
-		System.out.print("Enter Choice: ");
-		String choice = scanner.nextLine();
-
-		ch2 = switch(choice) {
-		case "1" -> {
-			System.out.print("Enter the name of bogie to add: ");
-			String bogie = scanner.nextLine();
-
-			System.out.print("Enter the capacity of bogie to add: ");
-			String capacity = scanner.nextLine();
-
-			bogies.add(new Bogie(bogie, Integer.parseInt(capacity)));
-			System.out.printf("Added bogie "+bogie+" of capacity "+capacity+" to train successfully.");
-
-			yield true;
-		}
-		case "2" -> {
-			System.out.print("Enter name of bogie to remove: ");
-			String bogie = scanner.nextLine();
-
-			for(Bogie b : bogies) {
-				if(b.getName().equals(bogie)) {
-					bogies.remove(b);
-					System.out.printf("Removed bogie "+bogie+" from train successfully.");
-					yield true;
+				long loopStart = System.nanoTime();
+				boolean loopSafe = true;
+				for(GoodsBogie gb : cargoList) {
+					if(gb.getType().equalsIgnoreCase("Cylindrical") && gb.getCargo().equalsIgnoreCase("Coal")) {
+						loopSafe = false;
+						break;
+					}
+				}
+				long loopEnd = System.nanoTime();
+				
+				System.out.println("Iterative Time: " + (loopEnd - loopStart));
+				System.out.println("Functional Time: " + (streamEnd - streamStart));
+				System.out.println("Safe to Proceed: " + isClear);
+			}
+			case "5" -> {
+				System.out.println("Cargo Manifest:\n");
+				for(GoodsBogie gb : cargoList) {
+					System.out.println(gb.getType() + " : " + gb.getCargo());
 				}
 			}
-
-			System.out.printf("The bogie "+bogie+" does not exist.");
-			yield true;
-
-		}
-		
-		case "3" -> {
-			System.out.println("Bogie Capacity Details:-\n");
-
-			for(Bogie bogie : bogies) {
-				System.out.println("%s -> %s", bogie.getName(), bogie.getCapacity());
+			case "0" -> active = false;
+			default -> System.out.println("Action Denied.");
 			}
-
-			yield true;
 		}
-		case "4" -> {
-			Collections.sort(bogies, Comparator.comparingInt(Bogie::getCapacity));
-			System.out.println("Bogies sorted successfully!");
-			yield true;
-		}
-		case "5" -> {
-			System.out.println("Filtering Bogies (Capacity > 60): ");
-			for(Bogie bogie : bogies.stream().filter(b -> b.getCapacity() > 60).collect(Collectors.toList())) {
-				System.out.printf("%s -> %s\n", bogie.getName(), bogie.getCapacity());
-			}
-			yield true;
-		}
-		case "6" -> {
-			Map<String, List<Bogie>> groupedBogies = bogies.stream().collect(Collectors.groupingBy(Bogie::getName));
-			System.out.println("Grouped Bogies:");
-			for(Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
-				System.out.printf("Boogie Type:"+ entry.getKey());
-				for(Bogie bogie : entry.getValue()) {
-					System.out.printf("Capacity ->"+bogie.getCapacity());
-				}
-			}
-			System.out.println();
-			yield true;
-		}
-		case "7" -> {
-			System.out.println("Total:"+bogies.stream().map(b -> b.getCapacity()).reduce(0, Integer::sum));
-			yield true;
-		}
-		case "0" -> {
-			System.out.println("Thank you!!");
-			yield false;
-		}
-		default -> {
-			System.out.println("Invalid Choice!!");
-			yield true;
-		}
-		};
 	}
 }
 
-private static void handleValidationFlow(Scanner scanner) {
-	final String train_regex = "TRN-\\d{4}";
-	final String cargo_regex = "PET-[A-Z]{2}";
 
-	Pattern trainIdPattern = Pattern.compile(train_regex);
-	Pattern cargoIdPattern = Pattern.compile(cargo_regex);
-
-	boolean inMenu = true;
-
-	while(inMenu) {
-		System.out.println("--- Validation Menu ---");
-		System.out.println("1. Validate Train ID");
-		System.out.println("2. Validate Cargo ID");
-		System.out.println("0. Exit");
-		System.out.print("Enter Your Choice: ");
-		String choice = scanner.nextLine();
-
-		inMenu = switch(choice) {
-		case "1" -> {
-			
-			System.out.print("Enter Train ID (Format: TRN-1234): ");
-			String trainId = scanner.nextLine();
-			
-			Matcher matcher = trainIdPattern.matcher(trainId);
-			
-			System.out.println("Train ID Valid : " + matcher.matches());
-			
-			yield true;
-		}
-		case "2" -> {
-			System.out.print("Enter Cargo ID (Format: PET-AB): ");
-			String cargoId = scanner.nextLine();
-			
-			Matcher matcher = cargoIdPattern.matcher(cargoId);
-			
-			System.out.println("Cargo ID Valid : " + matcher.matches());
-			yield true;
-		}
-		case "0" -> {
-			System.out.println("Exiting to main menu...\n");
-			yield false;
-		}
-		default -> {
-			System.out.println("Invalid Choice!");
-			yield true;
-		}
-		};
+/**
+ * Model for Freight Bogies
+ */
+class GoodsBogie {
+	private String type;
+	private String cargo;
+	
+	public GoodsBogie(String type, String cargo) {
+		this.type = type;
+		this.cargo = cargo;
 	}
-
-
-
+	
+	public String getType() { return type; }
+	public String getCargo() { return cargo; }
+	public void setType(String type) { this.type = type; }
+	public void setCargo(String cargo) { this.cargo = cargo; }
+	
+	@Override
+	public String toString() {
+		return "GoodsBogie{type='" + type + "', cargo='" + cargo + "'}";
+	}
 }
-}
-
-
-		
