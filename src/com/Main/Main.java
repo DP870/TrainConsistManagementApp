@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 	Each use case introduces one or more Java concepts through a realistic railway Scenario.
 	
 	@author Dhruv
-	@version 13.0
+	@version 15.0
 
  */
 import java.util.stream.Collectors;
@@ -49,11 +49,22 @@ public class Main {
 
 			isRunning = switch(navChoice) {
 			case "1" -> {
-				handleFleetFlow(fleetList, sc);
+				try {
+					handleFleetFlow(fleetList, sc);
+				} catch(FreightIncompatibilityException ex) {
+					System.out.println("Alert: " + ex.getMessage());
+				}
 				yield true;
 			}
 			case "2" -> {
-				handleCargoWorkflow(sc);
+				// Logic: try-catch-finally for runtime safety checks
+				try {
+					handleSecurityFlow(sc);
+				} catch(FreightIncompatibilityException ex) {
+					System.out.println("Safety Violation: " + ex.getMessage());
+				} finally {
+					System.out.println("Safety audit sequence finished for the current batch.");
+				}
 				yield true;
 			}
 			case "3" -> {
@@ -168,6 +179,7 @@ public class Main {
 			};
 		}
 	}
+	
 
 	private static void handleSecurityFlow(Scanner scanner) {
 		final String train_Exp="TRN-\\d{4}";
@@ -309,3 +321,15 @@ class CapacityValidationException extends Exception {
 		super(detail);
 	}
 }
+
+/**
+ * Custom Runtime Exception
+ */
+@SuppressWarnings("serial")
+class FreightIncompatibilityException extends RuntimeException {
+	public FreightIncompatibilityException(String msg) {
+		super(msg);
+	}
+}
+
+
