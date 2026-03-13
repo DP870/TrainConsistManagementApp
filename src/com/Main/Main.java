@@ -83,15 +83,16 @@ public class Main {
 		boolean subMenu = true;
 
 		while(subMenu) {
-			System.out.println("\n--- Consist Management Menu ---");
-			System.out.println("1. Attach Bogie");
-			System.out.println("2. Detach Bogie");
-			System.out.println("3. Verify Existence");
-			System.out.println("4. Show All Bogies");
-			System.out.println("5. Organize by Capacity");
-			System.out.println("6. Filter High-Capacity Units");
-			System.out.println("7. Group by Model Type");
-			System.out.println("8. Total Fleet Capacity");
+			System.out.println("---Consist Management Menu---");
+			System.out.println("1.Attach Bogie");
+			System.out.println("2.Detach Bogie");
+			System.out.println("3.Verify Existence");
+			System.out.println("4.Show All Bogies");
+			System.out.println("5.Organize by Capacity");
+			System.out.println("6.Filter High-Capacity Units");
+			System.out.println("7.Group by Model Type");
+			System.out.println("8.Total Fleet Capacity");
+			System.out.println("9.Bubble Sort");
 			System.out.println("0. Return");
 			System.out.print("Action: ");
 			String action = sc.nextLine();
@@ -168,8 +169,35 @@ public class Main {
 				System.out.println("Aggregate Fleet Seating: " + total);
 				yield true;
 			}
+			//Bubble sort
+			case "9"->{
+			int size = unitList.size();
+			int[] metrics = new int[size];
+			
+			for(int k = 0; k < size; k++) {
+				metrics[k] = unitList.get(k).getCapacity();
+			}
+			
+			System.out.println("Pre-sorted Metrics: " + Arrays.toString(metrics));
+			
+			
+			for(int outer = 0; outer < metrics.length - 1; outer++) {
+				for(int inner = 0; inner < metrics.length - outer - 1; inner++) {
+					if(metrics[inner] > metrics[inner + 1]) {
+						// Perform Swap --- > Bubble Sort
+						int placeholder = metrics[inner];
+						metrics[inner] = metrics[inner + 1];
+						metrics[inner + 1] = placeholder;
+					}
+				}
+			}
+			
+			System.out.println("Algorithmic Sorted Result: "+ Arrays.toString(metrics));
+			yield true;
+		}
+
 			case "0" -> {
-				System.out.println("Returning to main operations...\n");
+				System.out.println("Returning to main operations...");
 				yield false;
 			}
 			default -> {
@@ -179,17 +207,12 @@ public class Main {
 			};
 		}
 	}
-	
-
 	private static void handleSecurityFlow(Scanner scanner) {
 		final String train_Exp="TRN-\\d{4}";
 		final String cargo_Exp="PET-[A-Z]{2}";
-
 		Pattern pEngine = Pattern.compile(train_Exp);
 		Pattern pFreight = Pattern.compile(cargo_Exp);
-
 		boolean menuActive = true;
-
 		while(menuActive) {
 			System.out.println("--- Validation Security Menu ---");
 			System.out.println("1. Check Engine ID");
@@ -211,8 +234,7 @@ public class Main {
 			} else {
 				System.out.println("Error: Command not recognized.");
 			}
-		}
-	}
+		}}
 	
 	private static void handleCargoWorkflow(Scanner scanner) {
 		List<GoodsBogie> cargoList = new ArrayList<>();
@@ -252,17 +274,15 @@ public class Main {
 					if(gb.getType().equalsIgnoreCase(searchType)) {
 						exists = true; 
 						break;
-					}
-				}
-				System.out.println("Found: " + exists);
-			}
+					}}
+				System.out.println("Found: " +exists);}
 			case "4" -> {
-				long streamStart = System.nanoTime();
+				long streamStart =System.nanoTime();
 				boolean isClear = cargoList.stream().noneMatch(b -> b.getType().equalsIgnoreCase("Cylindrical") && b.getCargo().equalsIgnoreCase("Coal"));
-				long streamEnd = System.nanoTime();
+				long streamEnd =System.nanoTime();
 				
-				long loopStart = System.nanoTime();
-				boolean loopSafe = true;
+				long loopStart =System.nanoTime();
+				boolean loopSafe =true;
 				for(GoodsBogie gb : cargoList) {
 					if(gb.getType().equalsIgnoreCase("Cylindrical") && gb.getCargo().equalsIgnoreCase("Coal")) {
 						loopSafe = false;
