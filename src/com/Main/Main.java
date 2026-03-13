@@ -94,6 +94,7 @@ public class Main {
 			System.out.println("8.Total Fleet Capacity");
 			System.out.println("9.Bubble Sort");
 			System.out.println("10.Alphabetical Library Sort");
+			System.out.println("11.Linear Search for ID");
 			System.out.println("0. Return");
 			System.out.print("Action: ");
 			String action = sc.nextLine();
@@ -210,6 +211,32 @@ public class Main {
 				
 				yield true;
 			}
+			case "11" -> {
+				
+				String[] staticFleetIds = {"TRN-01", "TRN-02", "TRN-03", "TRN-04", "TRN-05"};
+				
+				System.out.print("Input Identifier to Search: ");
+				String searchKey = sc.nextLine();
+				
+				System.out.println("Scanning Fleet IDs: ");
+				for(String id : staticFleetIds) {
+					System.out.println("- " + id);
+				}
+				boolean matchFound = false;
+				for(String currentId : staticFleetIds) {
+					if(searchKey.equalsIgnoreCase(currentId)) {
+						matchFound = true;
+						break;
+					}
+				}
+				if(matchFound) {
+					System.out.println("Success: Identifier " + searchKey + " located in fleet.");
+				} else {
+					System.out.println("Failure: Identifier " + searchKey + " not found in system.");
+				}
+				yield true;
+			}
+
 
 
 			case "0" -> {
