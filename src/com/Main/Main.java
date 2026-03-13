@@ -93,6 +93,7 @@ public class Main {
 			System.out.println("7.Group by Model Type");
 			System.out.println("8.Total Fleet Capacity");
 			System.out.println("9.Bubble Sort");
+			System.out.println("10.Alphabetical Library Sort");
 			System.out.println("0. Return");
 			System.out.print("Action: ");
 			String action = sc.nextLine();
@@ -195,6 +196,21 @@ public class Main {
 			System.out.println("Algorithmic Sorted Result: "+ Arrays.toString(metrics));
 			yield true;
 		}
+			case "10" -> {
+				//UC17 
+				String[] labelList = new String[unitList.size()];
+				
+				for(int i=0;i<unitList.size(); i++) {
+					labelList[i]=unitList.get(i).getName();
+				}
+				
+				System.out.println("Original Designation Order: \n" + Arrays.toString(labelList));
+				Arrays.sort(labelList);
+				System.out.println("Alphabetical Sorted Order: \n" + Arrays.toString(labelList));
+				
+				yield true;
+			}
+
 
 			case "0" -> {
 				System.out.println("Returning to main operations...");
