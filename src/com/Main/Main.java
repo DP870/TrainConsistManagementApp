@@ -95,6 +95,7 @@ public class Main {
 			System.out.println("9.Bubble Sort");
 			System.out.println("10.Alphabetical Library Sort");
 			System.out.println("11.Linear Search for ID");
+			System.out.println("12.Binary Search for Unit ID");
 			System.out.println("0. Return");
 			System.out.print("Action: ");
 			String action = sc.nextLine();
@@ -233,6 +234,38 @@ public class Main {
 					System.out.println("Success: Identifier " + searchKey + " located in fleet.");
 				} else {
 					System.out.println("Failure: Identifier " + searchKey + " not found in system.");
+				}
+				yield true;
+			}
+			case "12" -> {
+				String[] sortedFleetIds = {"BG-100", "BG-220", "BG-315", "BG-490", "BG-501", "BG-700"};
+				
+				System.out.println("Input Unit ID to Search:");
+				String searchTarget = sc.nextLine();
+				
+				System.out.println("Authorized Fleet ID Pool: " + Arrays.toString(sortedFleetIds));
+				boolean targetLocated = false;
+				int low = 0;
+				int high = sortedFleetIds.length - 1;
+				
+				while(low <= high) {
+					int middle = low + (high - low) / 2;
+					int comparisonResult = searchTarget.compareTo(sortedFleetIds[middle]);
+					
+					if(comparisonResult == 0) {
+						targetLocated = true;
+						break;
+					} else if(comparisonResult < 0) {
+						high = middle - 1;
+					} else {
+						low = middle + 1;
+					}
+				}
+				
+				if(targetLocated) {
+					System.out.println("Database confirmation: Unit" + searchTarget + "found in fleet system.");
+				} else {
+					System.out.println("Database error: Unit" + searchTarget + "not recognized.");
 				}
 				yield true;
 			}
