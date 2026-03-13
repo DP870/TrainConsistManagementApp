@@ -96,6 +96,7 @@ public class Main {
 			System.out.println("10.Alphabetical Library Sort");
 			System.out.println("11.Linear Search for ID");
 			System.out.println("12.Binary Search for Unit ID");
+			System.out.println("13.Search(Fail-Fast Validation)");
 			System.out.println("0. Return");
 			System.out.print("Action: ");
 			String action = sc.nextLine();
@@ -262,6 +263,7 @@ public class Main {
 					}
 				}
 				
+				
 				if(targetLocated) {
 					System.out.println("Database confirmation: Unit" + searchTarget + "found in fleet system.");
 				} else {
@@ -269,6 +271,44 @@ public class Main {
 				}
 				yield true;
 			}
+			case "13" -> {
+				
+				String[] fleetIds = {"BG101", "BG205", "BG309", "BG412", "BG550"};
+				if(fleetIds.length == 0) {
+					throw new SystemStateException("Operation Blocked: Registry is empty. Cannot execute search.");
+				}
+				
+				System.out.print("Input Unit ID to Locate: ");
+				String searchTarget = sc.nextLine();
+				
+				System.out.println("Authorized ID Registry: " + Arrays.toString(fleetIds));
+				
+				//Binary Search Implementation
+				boolean located = false;
+				int start = 0;
+				int end = fleetIds.length - 1;
+				
+				while(start <= end) {
+					int mid = start + (end - start) / 2;
+					int res = searchTarget.compareTo(fleetIds[mid]);
+					if(res == 0) {
+						located = true;
+						break;
+					} else if(res < 0) {
+						end = mid - 1;
+					} else {
+						start = mid + 1;
+					}
+				}
+				
+				if(located) {
+					System.out.println("Database Update: Unit " +searchTarget+" located in active fleet.");
+				} else {
+					System.out.println("Database Update: Unit "+searchTarget+" NOT found in registry.");
+				}
+				yield true;
+			}
+
 
 
 
