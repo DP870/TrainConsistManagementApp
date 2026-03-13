@@ -299,3 +299,13 @@ class GoodsBogie {
 		return "GoodsBogie{type='" + type + "', cargo='" + cargo + "'}";
 	}
 }
+
+/**
+ * Custom Exception for Capacity Validation
+ */
+@SuppressWarnings("serial")
+class CapacityValidationException extends Exception {
+	public CapacityValidationException(String detail) {
+		super(detail);
+	}
+}
